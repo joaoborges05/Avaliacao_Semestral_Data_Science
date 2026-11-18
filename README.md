@@ -45,13 +45,15 @@ O objetivo é treinar um modelo que, a partir dos 9 atributos clínicos, indique
 
 ## 3. Como rodar
 
-No PowerShell, dentro da pasta do projeto:
+**Pré-requisito:** Python 3.10 ou mais novo. A pasta `.venv` não vai para o repositório, porque cada computador cria a sua. Por isso, o primeiro passo é recriar o ambiente e instalar as bibliotecas.
+
+Rode os comandos no terminal **dentro da pasta do projeto**: os scripts leem e gravam arquivos nessa pasta. No VS Code, basta abrir a pasta do projeto (Arquivo > Abrir Pasta) e usar o terminal integrado.
 
 ```powershell
 # 1. Criar o ambiente virtual (só na primeira vez)
 python -m venv .venv
 
-# 2. Ativar o ambiente
+# 2. Ativar o ambiente (no Linux ou Mac: source .venv/bin/activate)
 .venv\Scripts\Activate
 
 # 3. Instalar as bibliotecas
@@ -66,10 +68,17 @@ python inferencia_breast_cancer.py
 
 Para avaliar outra paciente, edite os valores do `DataFrame` na **etapa 2** de `inferencia_breast_cancer.py`.
 
-O `requirements.txt` foi gerado com `pip freeze > requirements.txt` depois da instalação das bibliotecas, como no roteiro das aulas. Ele fixa as versões exatas usadas nos resultados deste README: Python 3.15.2, pandas 3.1.1, numpy 2.5.5, scikit-learn 1.9.1, imbalanced-learn 0.14.2 e scipy 1.18.1 (teste de normalidade).
+### Versões das bibliotecas
 
-- As versões fixadas exigem um Python recente. Se a instalação falhar num Python mais antigo, instale sem fixar as versões: `pip install pandas numpy scikit-learn imbalanced-learn scipy`.
-- Os arquivos `.model` são gravados com `pickle` e dependem da versão do scikit-learn. Se a versão mudar, rode o treino de novo antes da inferência.
+O `requirements.txt` foi gerado com `pip freeze > requirements.txt`, como no roteiro das aulas. Ele fixa as versões exatas usadas nos resultados deste README: Python 3.15.2, pandas 3.1.1, numpy 2.5.5, scikit-learn 1.9.1, imbalanced-learn 0.14.2 e scipy 1.18.1 (teste de normalidade).
+
+| Versão do Python | Passo 3 (instalar as bibliotecas) |
+|---|---|
+| **3.12 ou mais nova** | `pip install -r requirements.txt` (testado com Python 3.13 e 3.15) |
+| **3.10 ou 3.11** | O `requirements.txt` falha, porque o numpy 2.5.5 exige Python 3.12 ou mais novo. Use `pip install pandas numpy scikit-learn imbalanced-learn scipy` (testado com Python 3.10) |
+
+- Com Python 3.10 (pandas 2.3.3, scikit-learn 1.7.2), o treino escolheu o mesmo modelo, com os mesmos hiperparâmetros e a mesma acurácia no teste (0.698). Só o cenário com SMOTE, que não é o escolhido, mudou um pouco: 0.581 no teste em vez de 0.593.
+- Os arquivos `.model` são gravados com `pickle` e dependem da versão do scikit-learn. Com outra versão, a inferência funciona, mas mostra o aviso `InconsistentVersionWarning`. Rodar o treino (passo 4) antes da inferência regrava os arquivos na versão instalada e elimina o aviso.
 
 ---
 
